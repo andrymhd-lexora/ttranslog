@@ -1,0 +1,8 @@
+{
+  "name": "T Trans Logistik",
+  "description": "Solusi Logistik Terpercaya untuk pengiriman kargo darat, laut, dan udara ke seluruh Indonesia oleh PT Tungkal Trans Indonesia.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
