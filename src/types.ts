@@ -1,3 +1,42 @@
+export interface CargoRulePoint {
+  num: number;
+  label: string;
+  value: string;
+  details?: string[];
+  highlight?: boolean;
+}
+
+export interface CargoCategoryRules {
+  id: "sea_land" | "air_commercial" | "air_freighter" | "air_non_commercial";
+  title: string;
+  subtitle: string;
+  badge: string;
+  modeType: "Darat & Laut" | "Udara Komersil" | "Udara Freighter" | "Udara Non-Komersil";
+  iconName: "Ship" | "Plane" | "Truck" | "Package";
+  popular?: boolean;
+  minWeight: string;
+  leadTime: string;
+  dimCalc: string;
+  maxDim: string;
+  maxWeight: string;
+  rules: CargoRulePoint[];
+}
+
+export interface PricingPlanInfo {
+  id: "land" | "sea" | "air";
+  title: string;
+  badge: string;
+  popular: boolean;
+  desc: string;
+  serviceType: string;
+  minWeight: string;
+  speed: string;
+  suitableFor: string;
+  coverage: string;
+  calcFormula: string;
+  features: string[];
+}
+
 export interface TranslationDict {
   navHome: string;
   navServices: string;

@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import SocialProof from "./components/SocialProof";
 import ServicesSection from "./components/ServicesSection";
+import EasternIndonesiaSection from "./components/EasternIndonesiaSection";
 import TrackingSection from "./components/TrackingSection";
 import PricingSection from "./components/PricingSection";
 import FaqSection from "./components/FaqSection";
@@ -61,6 +62,9 @@ export default function App() {
 
       {/* Services grid (Land, Sea, Air) */}
       <ServicesSection lang={lang} t={t} />
+
+      {/* Special Eastern Indonesia & 3T Remote Area Section */}
+      <EasternIndonesiaSection lang={lang} />
 
       {/* Cargo Tracking Simulator */}
       <TrackingSection lang={lang} t={t} />

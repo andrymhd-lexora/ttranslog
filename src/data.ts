@@ -1,4 +1,462 @@
-import { TranslationDict, TrackingData, ServiceDetail, Testimonial, FaqItem } from "./types";
+import { TranslationDict, TrackingData, ServiceDetail, Testimonial, FaqItem, PricingPlanInfo, CargoCategoryRules, Language } from "./types";
+
+export const CARGO_RULES_DATA_ID: CargoCategoryRules[] = [
+  {
+    id: "sea_land",
+    title: "Moda Laut & Darat",
+    subtitle: "Ketentuan Pengiriman Kargo Kapal Laut & Armada Truk Darat (Port To Door)",
+    badge: "Jalur Hemat & Volume Besar",
+    modeType: "Darat & Laut",
+    iconName: "Ship",
+    popular: false,
+    minWeight: "Sesuai rute / kuota minimum",
+    leadTime: "Terhitung dari Keberangkatan kapal",
+    dimCalc: "(Panjang X Lebar X Tinggi : 4.000 = ....Kg)",
+    maxDim: "Panjang 1.200 cm X Lebar 230 cm X Tinggi 230 cm",
+    maxWeight: "Bisa diangkut oleh buruh (melebihi batas dikenakan biaya mekanikal)",
+    rules: [
+      {
+        num: 1,
+        label: "Jadwal Kapal / Armada",
+        value: "Jadwal Kapal mengikuti jadwal resmi yang dikeluarkan oleh pihak pelayaran / armada darat."
+      },
+      {
+        num: 2,
+        label: "Awal Hitung Lead Time",
+        value: "Lead Time (estimasi waktu tiba) terhitung mulai dari hari keberangkatan kapal/armada darat dari pelabuhan asal."
+      },
+      {
+        num: 3,
+        label: "Komponen Biaya Tambahan",
+        value: "Harga dasar belum termasuk packing/kayu, repacking, asuransi, pajak (tax), dan biaya admin."
+      },
+      {
+        num: 4,
+        label: "Maksimal Dimensi Barang",
+        value: "Panjang 1.200 cm X Lebar 230 cm X Tinggi 230 cm."
+      },
+      {
+        num: 5,
+        label: "Batas Berat & Biaya Mekanikal",
+        value: "Maksimal berat barang adalah yang bisa diangkut secara manual oleh buruh. Apabila melebihi kapasitas buruh, akan dikenakan tambahan biaya mekanikal (crane/forklift)."
+      },
+      {
+        num: 6,
+        label: "Cakupan Port To Door",
+        value: "Layanan Port To Door adalah pengiriman mulai dari pelabuhan asal sampai dengan alamat penerima untuk area pengantaran dalam kota."
+      },
+      {
+        num: 7,
+        label: "Perhitungan Volumetrik",
+        value: "Perhitungan dimensi kargo: (Panjang X Lebar X Tinggi dalam cm : 4.000 = ....Kg)."
+      }
+    ]
+  },
+  {
+    id: "air_commercial",
+    title: "Moda Udara - Komersil Flight",
+    subtitle: "Ketentuan Pengiriman Kargo Penerbangan Reguler Maskapai Komersil (Port To Door)",
+    badge: "Penerbangan Harian Tepat Waktu",
+    modeType: "Udara Komersil",
+    iconName: "Plane",
+    popular: true,
+    minWeight: "Min. 10 Kg",
+    leadTime: "Terhitung dari Keberangkatan Pesawat",
+    dimCalc: "Lion Air: PxLxT/5.000 | Maskapai Lain: PxLxT/6.000",
+    maxDim: "Panjang 150 cm X Lebar 80 cm X Tinggi 80 cm",
+    maxWeight: "10kg - 69kg (No SC) | 70kg - Up (SC 100%, Max 150kg)",
+    rules: [
+      {
+        num: 1,
+        label: "Berat Minimum Pengiriman",
+        value: "Minimal muatan 10 Kg per Surat Muatan Udara (SMU)."
+      },
+      {
+        num: 2,
+        label: "Jadwal Flight",
+        value: "Jadwal Penerbangan tersedia setiap hari (Daily Commercial Flights)."
+      },
+      {
+        num: 3,
+        label: "Awal Hitung Lead Time",
+        value: "Lead Time terhitung dari tanggal/jam keberangkatan pesawat dari bandara asal."
+      },
+      {
+        num: 4,
+        label: "Komponen Biaya Tambahan",
+        value: "Harga belum termasuk packing, repacking, asuransi, pajak (tax), dan admin."
+      },
+      {
+        num: 5,
+        label: "Maksimal Dimensi Barang",
+        value: "Panjang 150 cm X Lebar 80 cm X Tinggi 80 cm."
+      },
+      {
+        num: 6,
+        label: "Batas Berat & Surcharge (SC)",
+        value: "10kg - 69kg = Tidak Kena SC (No SC) | 70kg ke atas = SC 100% (Maksimal 150kg per koli)."
+      },
+      {
+        num: 7,
+        label: "Cakupan Port To Door",
+        value: "Pengiriman dari Bandara asal sampai dengan alamat tujuan penerima untuk area pengantaran dalam kota."
+      },
+      {
+        num: 8,
+        label: "Perhitungan Dimensi Volumetrik",
+        value: "Khusus Lion Air: (P X L X T : 5.000 = .... Kg) | Maskapai Lain (Garuda/Citilink/Sriwijaya): (P X L X T : 6.000 = .... Kg)."
+      },
+      {
+        num: 9,
+        label: "Surcharge Berdasarkan Komoditi Barang",
+        value: "Live Animal & Human Remain = Surcharge 100% | Dangerous Goods (DG) = Surcharge 200% (diluar biaya shipdeck) | Komoditi khusus lainnya wajib konfirmasi ke Marketing."
+      }
+    ]
+  },
+  {
+    id: "air_freighter",
+    title: "Moda Udara - Freighter Flight",
+    subtitle: "Ketentuan Pengiriman Kargo Pesawat Kargo Khusus / Freighter (Port To Door)",
+    badge: "Kapasitas Besar Pesawat Kargo",
+    modeType: "Udara Freighter",
+    iconName: "Plane",
+    popular: false,
+    minWeight: "Min. 25 Kg",
+    leadTime: "Terhitung dari Keberangkatan Pesawat",
+    dimCalc: "(Panjang X Lebar X Tinggi : 6.000 = ....Kg)",
+    maxDim: "Panjang 200 cm X Lebar 200 cm X Tinggi 200 cm",
+    maxWeight: "Max 2.000 kg per koli (berlaku bertingkat SC)",
+    rules: [
+      {
+        num: 1,
+        label: "Berat Minimum Pengiriman",
+        value: "Minimal muatan 25 Kg."
+      },
+      {
+        num: 2,
+        label: "Awal Hitung Lead Time",
+        value: "Lead Time terhitung dari jadwal keberangkatan pesawat freighter."
+      },
+      {
+        num: 3,
+        label: "Komponen Biaya Tambahan",
+        value: "Harga belum termasuk packing, repacking, asuransi, tax, admin."
+      },
+      {
+        num: 4,
+        label: "Perhitungan Dimensi",
+        value: "(Panjang X Lebar X Tinggi : 6.000 = ........Kg)."
+      },
+      {
+        num: 5,
+        label: "Maksimal Dimensi Barang",
+        value: "Panjang 200 cm X Lebar 200 cm X Tinggi 200 cm."
+      },
+      {
+        num: 6,
+        label: "Maksimal Berat & Surcharge",
+        value: "25kg - 150kg = No SC | 151kg - 500kg = SC 50% | 251kg - 1.000kg = SC 100% | Maksimal 2.000 kg. (Khusus destinasi Ternate: 25kg - 100kg = No SC)."
+      },
+      {
+        num: 7,
+        label: "Cakupan Port To Door",
+        value: "Pengiriman dari Bandara asal sampai dengan alamat penerima dengan area pengantaran dalam kota."
+      },
+      {
+        num: 8,
+        label: "Jadwal Penerbangan Freighter",
+        value: "Rute BPN, BDJ, BTH, GTO, KDI, MDC, PLW, TTE, UPG = Selasa s/d Minggu | Rute AMQ, DJJ, KOE, TRK, TIM, WMX = Konfirmasi Ke Marketing."
+      }
+    ]
+  },
+  {
+    id: "air_non_commercial",
+    title: "Moda Udara - Non Komersil Flight",
+    subtitle: "Ketentuan Pengiriman via Penerbangan Non-Komersil / Penerbangan Khusus (Port To Door)",
+    badge: "Muatan Spesial & Jumbo",
+    modeType: "Udara Non-Komersil",
+    iconName: "Package",
+    popular: false,
+    minWeight: "Min. 50 Kg",
+    leadTime: "Terhitung dari Keberangkatan Pesawat",
+    dimCalc: "(Panjang X Lebar X Tinggi : 6.000 = ....Kg)",
+    maxDim: "Panjang 1.200 cm X Lebar 250 cm X Tinggi 250 cm",
+    maxWeight: "Max 7.000 kg (Heavy Cargo)",
+    rules: [
+      {
+        num: 1,
+        label: "Berat Minimum Pengiriman",
+        value: "Minimal muatan 50 Kg."
+      },
+      {
+        num: 2,
+        label: "Jadwal Penerbangan",
+        value: "Jadwal penerbangan wajib melakukan konfirmasi terlebih dahulu ke Marketing."
+      },
+      {
+        num: 3,
+        label: "Awal Hitung Lead Time",
+        value: "Lead Time terhitung mulai dari tanggal/jam keberangkatan pesawat."
+      },
+      {
+        num: 4,
+        label: "Komponen Biaya Tambahan",
+        value: "Harga belum termasuk packing, repacking, asuransi, tax, dan admin."
+      },
+      {
+        num: 5,
+        label: "Perhitungan Dimensi Barang",
+        value: "(Panjang X Lebar X Tinggi : 6.000 = ....Kg)."
+      },
+      {
+        num: 6,
+        label: "Maksimal Dimensi Barang",
+        value: "Panjang 1.200 cm X Lebar 250 cm X Tinggi 250 cm."
+      },
+      {
+        num: 7,
+        label: "Maksimal Berat Barang",
+        value: "Barang menggunakan karung = No SC. Untuk Heavy Cargo wajib hubungi Marketing (Maksimal hingga 7.000 kg)."
+      },
+      {
+        num: 8,
+        label: "Cakupan Port To Door",
+        value: "Pengiriman dari Bandara asal sampai dengan alamat penerima dengan area pengantaran adalah dalam kota."
+      }
+    ]
+  }
+];
+
+export const CARGO_RULES_DATA_EN: CargoCategoryRules[] = [
+  {
+    id: "sea_land",
+    title: "Sea & Land Freight Mode",
+    subtitle: "Terms and conditions for Maritime Ships & Trucking Fleet Shipments (Port To Door)",
+    badge: "Economical & Large Volume",
+    modeType: "Darat & Laut",
+    iconName: "Ship",
+    popular: false,
+    minWeight: "Varies by route / minimum quota",
+    leadTime: "Calculated from vessel departure",
+    dimCalc: "(Length X Width X Height in cm : 4,000 = ....Kg)",
+    maxDim: "Length 1,200 cm X Width 230 cm X Height 230 cm",
+    maxWeight: "Manual labor limit (mechanical charges apply beyond limit)",
+    rules: [
+      {
+        num: 1,
+        label: "Vessel / Fleet Schedules",
+        value: "Schedules strictly follow official dates released by shipping lines / land fleet operators."
+      },
+      {
+        num: 2,
+        label: "Lead Time Calculation Point",
+        value: "Lead Time (estimated transit time) starts from the day the vessel/truck departs from origin port."
+      },
+      {
+        num: 3,
+        label: "Additional Charge Components",
+        value: "Base rates exclude crate packing/repacking, insurance, tax, and administrative fees."
+      },
+      {
+        num: 4,
+        label: "Maximum Cargo Dimensions",
+        value: "Length 1,200 cm X Width 230 cm X Height 230 cm."
+      },
+      {
+        num: 5,
+        label: "Weight Limit & Mechanical Fee",
+        value: "Maximum weight per item is what can be manually carried by port laborers. Exceeding items incur additional mechanical crane/forklift fees."
+      },
+      {
+        num: 6,
+        label: "Port To Door Scope",
+        value: "Port To Door includes transport from origin port up to recipient address within inner-city limits."
+      },
+      {
+        num: 7,
+        label: "Volumetric Calculation",
+        value: "Cargo dimension calculation: (Length X Width X Height in cm : 4,000 = ....Kg)."
+      }
+    ]
+  },
+  {
+    id: "air_commercial",
+    title: "Air Freight - Commercial Flight",
+    subtitle: "Terms and conditions for Regular Commercial Passenger Airline Cargo (Port To Door)",
+    badge: "Daily On-Time Flights",
+    modeType: "Udara Komersil",
+    iconName: "Plane",
+    popular: true,
+    minWeight: "Min. 10 Kg",
+    leadTime: "Calculated from flight departure",
+    dimCalc: "Lion Air: LxWxH/5,000 | Other Airlines: LxWxH/6,000",
+    maxDim: "Length 150 cm X Width 80 cm X Height 80 cm",
+    maxWeight: "10kg - 69kg (No SC) | 70kg - Up (SC 100%, Max 150kg)",
+    rules: [
+      {
+        num: 1,
+        label: "Minimum Shipment Weight",
+        value: "Minimum cargo weight is 10 Kg per Air Waybill (SMU)."
+      },
+      {
+        num: 2,
+        label: "Flight Schedule",
+        value: "Daily flights available on commercial airline schedules."
+      },
+      {
+        num: 3,
+        label: "Lead Time Calculation Point",
+        value: "Lead Time starts strictly from the flight departure time at origin airport."
+      },
+      {
+        num: 4,
+        label: "Additional Charge Components",
+        value: "Rates exclude packing, repacking, insurance, tax, and administrative fees."
+      },
+      {
+        num: 5,
+        label: "Maximum Dimensions",
+        value: "Length 150 cm X Width 80 cm X Height 80 cm."
+      },
+      {
+        num: 6,
+        label: "Weight Limit & Surcharges (SC)",
+        value: "10kg - 69kg = No Surcharge | 70kg and above = 100% Surcharge (Max 150kg per piece)."
+      },
+      {
+        num: 7,
+        label: "Port To Door Scope",
+        value: "Shipment from origin airport to recipient address within inner-city delivery zones."
+      },
+      {
+        num: 8,
+        label: "Volumetric Calculation Formula",
+        value: "Lion Air Only: (L X W X H : 5,000 = .... Kg) | Other Airlines (Garuda/Citilink/Sriwijaya): (L X W X H : 6,000 = .... Kg)."
+      },
+      {
+        num: 9,
+        label: "Commodity Based Surcharges",
+        value: "Live Animals & Human Remains = 100% SC | Dangerous Goods (DG) = 200% SC (excluding shipdeck fee) | Other special commodities require prior Marketing confirmation."
+      }
+    ]
+  },
+  {
+    id: "air_freighter",
+    title: "Air Freight - Freighter Flight",
+    subtitle: "Terms and conditions for Dedicated All-Cargo Cargo Aircraft (Port To Door)",
+    badge: "Large Capacity Aircraft",
+    modeType: "Udara Freighter",
+    iconName: "Plane",
+    popular: false,
+    minWeight: "Min. 25 Kg",
+    leadTime: "Calculated from flight departure",
+    dimCalc: "(Length X Width X Height in cm : 6,000 = ....Kg)",
+    maxDim: "Length 200 cm X Width 200 cm X Height 200 cm",
+    maxWeight: "Max 2,000 kg per piece (tiered SC applies)",
+    rules: [
+      {
+        num: 1,
+        label: "Minimum Shipment Weight",
+        value: "Minimum cargo weight is 25 Kg."
+      },
+      {
+        num: 2,
+        label: "Lead Time Calculation Point",
+        value: "Lead Time is calculated starting from freighter flight departure."
+      },
+      {
+        num: 3,
+        label: "Additional Charge Components",
+        value: "Rates exclude packing, repacking, insurance, tax, and admin fees."
+      },
+      {
+        num: 4,
+        label: "Volumetric Calculation",
+        value: "(Length X Width X Height in cm : 6,000 = ........Kg)."
+      },
+      {
+        num: 5,
+        label: "Maximum Cargo Dimensions",
+        value: "Length 200 cm X Width 200 cm X Height 200 cm."
+      },
+      {
+        num: 6,
+        label: "Max Weight & Tiered Surcharge",
+        value: "25kg - 150kg = No SC | 151kg - 500kg = 50% SC | 251kg - 1,000kg = 100% SC | Maximum 2,000 kg. (Special rule Ternate destination: 25kg - 100kg = No SC)."
+      },
+      {
+        num: 7,
+        label: "Port To Door Scope",
+        value: "Shipment from origin airport up to recipient address within inner-city limits."
+      },
+      {
+        num: 8,
+        label: "Freighter Flight Schedule",
+        value: "Routes BPN, BDJ, BTH, GTO, KDI, MDC, PLW, TTE, UPG = Tuesday to Sunday | Routes AMQ, DJJ, KOE, TRK, TIM, WMX = Confirm with Marketing."
+      }
+    ]
+  },
+  {
+    id: "air_non_commercial",
+    title: "Air Freight - Non Commercial Flight",
+    subtitle: "Terms and conditions for Charter / Special Non-Commercial Air Freight (Port To Door)",
+    badge: "Special & Heavy Cargo",
+    modeType: "Udara Non-Komersil",
+    iconName: "Package",
+    popular: false,
+    minWeight: "Min. 50 Kg",
+    leadTime: "Calculated from flight departure",
+    dimCalc: "(Length X Width X Height in cm : 6,000 = ....Kg)",
+    maxDim: "Length 1,200 cm X Width 250 cm X Height 250 cm",
+    maxWeight: "Max 7,000 kg (Heavy Cargo)",
+    rules: [
+      {
+        num: 1,
+        label: "Minimum Shipment Weight",
+        value: "Minimum cargo weight is 50 Kg."
+      },
+      {
+        num: 2,
+        label: "Flight Schedule",
+        value: "Flight schedule must be confirmed with Marketing team prior to booking."
+      },
+      {
+        num: 3,
+        label: "Lead Time Calculation Point",
+        value: "Lead Time calculated from the exact departure time of the non-commercial aircraft."
+      },
+      {
+        num: 4,
+        label: "Additional Charge Components",
+        value: "Rates exclude packing, repacking, insurance, tax, and admin fees."
+      },
+      {
+        num: 5,
+        label: "Volumetric Calculation",
+        value: "(Length X Width X Height in cm : 6,000 = ....Kg)."
+      },
+      {
+        num: 6,
+        label: "Maximum Cargo Dimensions",
+        value: "Length 1,200 cm X Width 250 cm X Height 250 cm."
+      },
+      {
+        num: 7,
+        label: "Maximum Weight & Heavy Cargo",
+        value: "Sack packed items = No SC. For Heavy Cargo contact Marketing Hub (Maximum capacity up to 7,000 kg)."
+      },
+      {
+        num: 8,
+        label: "Port To Door Scope",
+        value: "Shipment from origin airport up to recipient address within inner-city limits."
+      }
+    ]
+  }
+];
+
+export const getCargoRules = (lang: Language): CargoCategoryRules[] => {
+  return lang === "ID" ? CARGO_RULES_DATA_ID : CARGO_RULES_DATA_EN;
+};
 
 export const ID_TRANSLATION: TranslationDict = {
   navHome: "Beranda",
@@ -61,17 +519,17 @@ export const ID_TRANSLATION: TranslationDict = {
   trackHistory: "Riwayat Perjalanan",
 
   // Pricing Section
-  priceTitle: "Pilihan Tarif Hemat",
-  priceSubtitle: "Kami memberikan skema harga bersahabat dengan komitmen proteksi barang tanpa kompromi.",
-  priceUnitKg: "/ Kg",
+  priceTitle: "Informasi Spesifikasi & Ketentuan Kargo",
+  priceSubtitle: "Panduan lengkap spesifikasi pengiriman, estimasi durasi, dan skema kalkulasi untuk Kargo Darat, Kargo Laut, dan Kargo Udara.",
+  priceUnitKg: "",
   priceFeatures: [
     "Gratis Layanan Pickup (Min. berat)",
-    "Asuransi Kehilangan & Kerusakan",
-    "Customer Service Handal 24/7",
-    "Pelacakan Online Real-time",
-    "Bantuan Bongkar Muat Barang"
+    "Asuransi Kehilangan & Kerusakan All-Risk",
+    "Customer Service & Dispatcher 24/7",
+    "Pelacakan Posisi Kargo Real-time",
+    "Bantuan Bongkar Muat & Packing Kayu"
   ],
-  priceCta: "Pilih Jalur Ini",
+  priceCta: "Tanya Tarif & Konsultasi WA",
 
   // FAQ Section
   faqTitle: "Pertanyaan yang Sering Diajukan",
@@ -156,17 +614,17 @@ export const EN_TRANSLATION: TranslationDict = {
   trackHistory: "Transit Logs",
 
   // Pricing Section
-  priceTitle: "Affordable Shipping Rates",
-  priceSubtitle: "We deliver customer-centric pricing models with uncompromised material protection commitments.",
-  priceUnitKg: "/ Kg",
+  priceTitle: "Cargo Route & Specification Guide",
+  priceSubtitle: "Comprehensive guide on shipping specs, estimated durations, and calculation rules for Land Cargo, Sea Cargo, and Air Cargo.",
+  priceUnitKg: "",
   priceFeatures: [
-    "Free Pickup Service (Min. weight)",
-    "Damage & Loss Full Insurance",
-    "Expert Support Assistance 24/7",
+    "Free Pickup Service (Threshold min. weight)",
+    "All-Risk Loss & Damage Insurance Coverage",
+    "Dedicated 24/7 Dispatcher & Support",
     "Real-time Digital Cargo Tracking",
-    "Cargo Loading & Unloading Aid"
+    "Loading/Unloading & Wooden Crate Option"
   ],
-  priceCta: "Select Cargo Route",
+  priceCta: "Inquire Rates via WA",
 
   // FAQ Section
   faqTitle: "Frequently Asked Questions",
@@ -356,41 +814,143 @@ export const SERVICES_DATA: ServiceDetail[] = [
   }
 ];
 
-export const PRICING_PLANS = [
+export const PRICING_PLANS_ID: PricingPlanInfo[] = [
   {
     id: "land",
-    title: "Kargo Darat (FTL / LTL)",
-    priceIdr: "3.500",
+    title: "Kargo Darat (Land Cargo)",
+    badge: "Efisien & Terjangkau",
+    popular: false,
+    desc: "Pengiriman muatan via jalan darat melintasi tol dan antar pulau Sumatera, Jawa, Bali, hingga NTB.",
+    serviceType: "FTL (Full Truck) & LTL (Eceran)",
     minWeight: "Min. 50 kg",
     speed: "3 - 5 Hari Kerja",
-    icon: "Truck",
-    popular: false,
-    badge: "Tarif Hemat Sumatera-Jawa",
-    desc: "Pengiriman barang retail industri, furniture, suku cadang, dan hasil komoditi lewat tol trans."
+    suitableFor: "Barang Retail, Sparepart, Furniture, Komoditas, & Alat Proyek",
+    coverage: "Jawa, Sumatera, Bali, & Lombok",
+    calcFormula: "(P x L x T Dalam cm) / 4.000",
+    features: [
+      "Armada Lengkap: CDE, CDD, Fuso, Tronton Wingbox & Trailer",
+      "Sewa Satu Truk Penuh (FTL) atau Pengiriman Eceran (LTL)",
+      "Jadwal Keberangkatan Harian Rute Lintas Pulau",
+      "Gratis Layanan Pickup untuk Berat Akumulatif Tertentu",
+      "Perhitungan Berat Transparan Menggunakan Volumetrik",
+      "Proteksi Asuransi All-Risk & Pengawalan Muatan"
+    ]
   },
   {
     id: "sea",
-    title: "Kargo Laut (LCL / FCL)",
-    priceIdr: "2.500",
-    minWeight: "Min. 100 kg",
-    speed: "7 - 14 Hari Kerja",
-    icon: "Ship",
+    title: "Kargo Laut (Sea Cargo)",
+    badge: "Terfavorit Volume Jumbo",
     popular: true,
-    badge: "Terfavorit Antar Pulau",
-    desc: "Pengiriman alat berat, tumpukan semen/pupuk, besi konstruksi, dan suplai dagang bervolume jumbo."
+    desc: "Solusi terhemat untuk muatan berskala masif, kontainer peti kemas, dan distribusi antar pulau Nusantara.",
+    serviceType: "FCL (Kontainer) & LCL (Kubikasi)",
+    minWeight: "Min. 100 kg / 1 CBM",
+    speed: "7 - 14 Hari Kerja",
+    suitableFor: "Alat Berat, Material Konstruksi, Hasil Pabrik, & Stok Grosir",
+    coverage: "Seluruh Pelabuhan Utama & Pelosok Indonesia",
+    calcFormula: "Per Kubik (CBM) atau Per Kontainer (20ft / 40ft)",
+    features: [
+      "Kontainer 20ft, 40ft, 40ft HC, Dry & Reefer Container",
+      "Pengiriman Kubikasi Hemat (LCL) untuk Usaha Kecil-Menengah",
+      "Kerjasama Kapal Cepat Pelni & Liner Utama (Meratus, Temas)",
+      "Layanan Port-to-Port, Port-to-Door, hingga Door-to-Door",
+      "Pengurusan Dokumen Manifest & Bill of Lading (B/L)",
+      "Layanan Stuffing & Unstuffing Profesional di Depo"
+    ]
   },
   {
     id: "air",
-    title: "Kargo Udara (Express Air)",
-    priceIdr: "15.000",
+    title: "Kargo Udara (Air Cargo)",
+    badge: "Kecepatan Prioritas Utama",
+    popular: false,
+    desc: "Pengiriman udara super cepat prioritas tinggi untuk barang bernilai tinggi dan berbatas waktu ketat.",
+    serviceType: "Express Air Freight Prioritas",
     minWeight: "Min. 10 kg",
     speed: "1 - 2 Hari Kerja",
-    icon: "Plane",
-    popular: false,
-    badge: "Kecepatan Maksimal Prioritas",
-    desc: "Pengiriman dokumen penting, barang farmasi, suku cadang mesin pabrik kritis, atau gadget elektronik."
+    suitableFor: "Dokumen Penting, Obat/Vaksin, Elektronik, & Sparepart Kritis",
+    coverage: "Seluruh Kota Bandara Utama di Indonesia",
+    calcFormula: "(P x L x T Dalam cm) / 6.000",
+    features: [
+      "Kemitraan Resmi Maskapai Garuda Indonesia, Citilink, & Lion Cargo",
+      "Jaminan Tiba Sameday / Nextday ke Kota-Kota Besar",
+      "Penanganan Khusus Dokumen & Barang Bernilai Tinggi",
+      "Pengamanan Ekstra Packing Kayu & Segel Anti-Tempered Digital",
+      "Proses Cepat Bea Cukai & Pengecekan X-Ray Bandara",
+      "Lacak Posisi Penerbangan Real-Time"
+    ]
   }
 ];
+
+export const PRICING_PLANS_EN: PricingPlanInfo[] = [
+  {
+    id: "land",
+    title: "Land Cargo (FTL / LTL)",
+    badge: "Efficient & Cost-Effective",
+    popular: false,
+    desc: "Flexible overland transportation connecting major cities across Java, Sumatra, Bali, and Lombok.",
+    serviceType: "FTL (Full Truck) & LTL (Part Load)",
+    minWeight: "Min. 50 kg",
+    speed: "3 - 5 Business Days",
+    suitableFor: "Retail Goods, Machinery Parts, Furniture, Commodities & Project Cargo",
+    coverage: "Java, Sumatra, Bali, & Lombok Routes",
+    calcFormula: "(L x W x H in cm) / 4,000",
+    features: [
+      "Complete Fleet: CDE, CDD, Fuso, Tronton Wingbox & Trailers",
+      "Full Truck Load (FTL) or Less Than Truck Load (LTL) options",
+      "Daily Scheduled Departures Across Main Highways",
+      "Free Doorstep Pickup for Minimum Threshold Weights",
+      "Transparent Pricing based on Actual or Volume Weight",
+      "Full All-Risk Cargo Insurance & Fleet Tracking"
+    ]
+  },
+  {
+    id: "sea",
+    title: "Sea Cargo (FCL / LCL)",
+    badge: "Most Popular for Bulk Cargo",
+    popular: true,
+    desc: "Economical solution for heavy machinery, bulk merchandise, and nationwide inter-island containers.",
+    serviceType: "FCL (Full Container) & LCL (Consolidated)",
+    minWeight: "Min. 100 kg / 1 CBM",
+    speed: "7 - 14 Business Days",
+    suitableFor: "Heavy Machinery, Construction Supplies, Industrial Bulk, & Wholesale Stock",
+    coverage: "All Major Ports & Island Hubs Nationwide",
+    calcFormula: "Per Cubic Meter (CBM) or Per Container (20ft / 40ft)",
+    features: [
+      "20ft, 40ft, 40ft High Cube Dry & Specialized Containers",
+      "LCL Consolidation for Smaller Cubic Volume Cargo",
+      "Direct Partnerships with Pelni, Meratus, & Temas Liners",
+      "Flexible Options: Port-to-Port, Port-to-Door, & Door-to-Door",
+      "Port Document Handling & Bill of Lading (B/L) Management",
+      "Professional Cargo Stuffing & Depot Handling"
+    ]
+  },
+  {
+    id: "air",
+    title: "Air Cargo (Express Air)",
+    badge: "Maximum Priority Speed",
+    popular: false,
+    desc: "Ultra-fast priority air freight for time-critical, high-value, and sensitive shipments.",
+    serviceType: "Priority Express Air Freight",
+    minWeight: "Min. 10 kg",
+    speed: "1 - 2 Business Days",
+    suitableFor: "Legal Documents, Pharmaceuticals, Electronics, & Critical Machinery Parts",
+    coverage: "All Major Airport Cities in Indonesia",
+    calcFormula: "(L x W x H in cm) / 6,000",
+    features: [
+      "Official Cargo Agent for Garuda Indonesia, Citilink, & Lion Air",
+      "Sameday / Nextday Delivery Guarantee to Main Metropolitan Hubs",
+      "Specialized Handling for High-Value & Sensitive Shipments",
+      "Extra Protection: Wooden Crate & Digital Anti-Temper Seals",
+      "Fast-Track Airport X-Ray Security Clearing",
+      "Real-Time Air Freight Flight Tracking"
+    ]
+  }
+];
+
+export const getPricingPlans = (lang: Language): PricingPlanInfo[] => {
+  return lang === "ID" ? PRICING_PLANS_ID : PRICING_PLANS_EN;
+};
+
+export const PRICING_PLANS = PRICING_PLANS_ID;
 
 export const FAQ_DATA: FaqItem[] = [
   {
