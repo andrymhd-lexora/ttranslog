@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Truck, MapPin, Phone, Mail, Send, CheckCircle } from "lucide-react";
 import { TranslationDict, Language } from "../types";
+import LegalModals from "./LegalModals";
 
 interface FooterProps {
   lang: Language;
@@ -15,6 +16,15 @@ export default function Footer({ lang, t }: FooterProps) {
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  // Legal Modal State
+  const [isLegalOpen, setIsLegalOpen] = useState(false);
+  const [legalType, setLegalType] = useState<"terms" | "privacy">("terms");
+
+  const openLegalModal = (type: "terms" | "privacy") => {
+    setLegalType(type);
+    setIsLegalOpen(true);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -193,17 +203,37 @@ export default function Footer({ lang, t }: FooterProps) {
         {/* Lower section copyright */}
         <div className="pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-4">
           <p className="font-sans">
-            &copy; {new Date().getFullYear()} T Trans Logistik. {t.footerRights}
+            &copy; {new Date().getFullYear()} PT Tungkal Trans Indonesia (TTranslog). {t.footerRights}
           </p>
-          <div className="flex gap-6 font-medium">
-            <a href="#services" className="hover:text-white transition-colors">Services</a>
-            <a href="#tracking" className="hover:text-white transition-colors">Tracking</a>
-            <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
-            <a href="https://tungkaltransindonesia.com" className="hover:text-white transition-colors">PT Tungkal Trans Indonesia</a>
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6 font-medium">
+            <button
+              onClick={() => openLegalModal("terms")}
+              className="hover:text-white transition-colors cursor-pointer text-slate-400 font-semibold underline underline-offset-4 decoration-slate-700 hover:decoration-cyan-400"
+            >
+              Syarat & Ketentuan
+            </button>
+            <button
+              onClick={() => openLegalModal("privacy")}
+              className="hover:text-white transition-colors cursor-pointer text-slate-400 font-semibold underline underline-offset-4 decoration-slate-700 hover:decoration-cyan-400"
+            >
+              Kebijakan Privasi
+            </button>
+            <span className="hidden sm:inline text-slate-700">|</span>
+            <span className="text-slate-400 font-bold">
+              PT Tungkal Trans Indonesia
+            </span>
           </div>
         </div>
 
       </div>
+
+      {/* Modal Legal Documents */}
+      <LegalModals
+        isOpen={isLegalOpen}
+        activeType={legalType}
+        onClose={() => setIsLegalOpen(false)}
+        lang={lang}
+      />
     </footer>
   );
 }

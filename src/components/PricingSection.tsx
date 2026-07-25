@@ -1,7 +1,7 @@
-import React from "react";
-import { Check, Truck, Ship, Plane, HelpCircle, Coins } from "lucide-react";
+import React, { useState } from "react";
+import { Ship, Plane, Package, Truck, Scale, Clock, MapPin, ShieldCheck, ArrowRight, CheckCircle2, PhoneCall, AlertTriangle, FileText, Anchor } from "lucide-react";
 import { TranslationDict, Language } from "../types";
-import { PRICING_PLANS } from "../data";
+import { getCargoRules } from "../data";
 
 interface PricingSectionProps {
   lang: Language;
@@ -9,156 +9,275 @@ interface PricingSectionProps {
 }
 
 export default function PricingSection({ lang, t }: PricingSectionProps) {
-  
+  const cargoRules = getCargoRules(lang);
+  const [selectedTab, setSelectedTab] = useState<string>("all");
+
   const getIcon = (id: string) => {
     switch (id) {
-      case "land":
-        return <Truck className="h-6 w-6 text-violet-600 dark:text-cyan-400" />;
-      case "sea":
+      case "sea_land":
         return <Ship className="h-6 w-6 text-white" />;
-      case "air":
-        return <Plane className="h-6 w-6 text-violet-600 dark:text-cyan-400" />;
+      case "air_commercial":
+        return <Plane className="h-6 w-6 text-white" />;
+      case "air_freighter":
+        return <Plane className="h-6 w-6 text-white" />;
+      case "air_non_commercial":
+        return <Package className="h-6 w-6 text-white" />;
       default:
-        return <Truck className="h-6 w-6 text-violet-600" />;
+        return <Truck className="h-6 w-6 text-white" />;
     }
   };
 
-  const getWaLink = (planTitle: string) => {
-    const text = `Halo T Trans Logistik, saya tertarik untuk menggunakan layanan kargo: *${planTitle}*.\n\nMohon informasi prosedur pemesanan lebih lanjut. Terima kasih!`;
+  const getWaLink = (modeTitle: string) => {
+    const text = `Halo Marketing T Trans Logistik, saya ingin bertanya dan berkonsultasi mengenai *KETENTUAN ${modeTitle.toUpperCase()} (PORT TO DOOR)*.\n\nMohon bantuan estimasi ongkir dan jadwal penjemputan barang. Terima kasih!`;
     return `https://wa.me/6285830831654?text=${encodeURIComponent(text)}`;
   };
+
+  const filteredRules = selectedTab === "all"
+    ? cargoRules
+    : cargoRules.filter((item) => item.id === selectedTab);
 
   return (
     <section
       id="pricing"
-      className="py-24 bg-[#f8fafc] dark:bg-slate-950 transition-colors duration-300"
+      className="py-20 bg-[#f8fafc] dark:bg-slate-950 transition-colors duration-300"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+        <div className="text-center max-w-3xl mx-auto space-y-4">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-100 dark:bg-violet-900/30 text-[#7c3aed] dark:text-cyan-400 border border-violet-200/50">
-            <Coins className="h-3.5 w-3.5" />
-            <span className="font-sans font-bold text-[10px] uppercase tracking-wider">{t.navPricing}</span>
+            <FileText className="h-3.5 w-3.5" />
+            <span className="font-sans font-bold text-[10px] uppercase tracking-wider">
+              {lang === "ID" ? "Ketentuan Resmi Forwarding" : "Official Freight Terms"}
+            </span>
           </div>
           <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-slate-900 dark:text-white tracking-tight">
-            {t.priceTitle}
+            {lang === "ID" ? "Ketentuan Operasional Tiap Moda Kargo" : "Operational Terms by Freight Mode"}
           </h2>
-          <p className="font-sans text-slate-600 dark:text-slate-400 text-base">
-            {t.priceSubtitle}
+          <p className="font-sans text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed">
+            {lang === "ID"
+              ? "Informasi resmi spesifikasi, batas dimensi, jadwal penerbangan/kapal, dan skema Port To Door PT Tungkal Trans Indonesia."
+              : "Official specifications, dimension limits, flight/ship schedules, and Port To Door rules for PT Tungkal Trans Indonesia."}
           </p>
         </div>
 
-        {/* Pricing Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
-          {PRICING_PLANS.map((plan) => {
-            const isPopular = plan.popular;
-            
-            return (
-              <div
-                key={plan.id}
-                className={`relative border rounded-[40px] p-6 sm:p-10 flex flex-col justify-between transition-all duration-300 ${
-                  isPopular
-                    ? "bg-gradient-to-b from-[#7c3aed] to-indigo-800 text-white border-transparent shadow-2xl shadow-purple-500/20 md:-translate-y-4 scale-[1.02]"
-                    : "bg-white dark:bg-slate-900 text-slate-900 dark:text-white border-slate-100 dark:border-slate-800/50 shadow-xl shadow-slate-200/40 dark:shadow-none hover:shadow-2xl"
-                }`}
-              >
-                {/* Popular Badge */}
-                {isPopular && (
-                  <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-cyan-400 text-slate-900 font-sans font-extrabold text-[10px] uppercase tracking-widest px-4 py-1.5 rounded-full shadow-md">
-                    {plan.badge}
-                  </span>
-                )}
+        {/* Tab Filters */}
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          <button
+            onClick={() => setSelectedTab("all")}
+            className={`px-4 py-2 rounded-full font-sans text-xs font-bold transition-all cursor-pointer ${
+              selectedTab === "all"
+                ? "bg-[#7c3aed] text-white shadow-lg shadow-purple-500/20"
+                : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800"
+            }`}
+          >
+            {lang === "ID" ? "Semua Moda (4 Ketentuan)" : "All Freight Modes"}
+          </button>
+          {cargoRules.map((mode) => (
+            <button
+              key={mode.id}
+              onClick={() => setSelectedTab(mode.id)}
+              className={`px-4 py-2 rounded-full font-sans text-xs font-bold transition-all cursor-pointer ${
+                selectedTab === mode.id
+                  ? "bg-[#7c3aed] text-white shadow-lg shadow-purple-500/20"
+                  : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800"
+              }`}
+            >
+              {mode.title}
+            </button>
+          ))}
+        </div>
 
-                <div className="space-y-6">
-                  {/* Card Icon & Header */}
-                  <div className="flex justify-between items-center">
-                    <div
-                      className={`p-3.5 rounded-2xl ${
-                        isPopular ? "bg-white/20" : "bg-violet-50 dark:bg-violet-950/40"
-                      }`}
-                    >
-                      {getIcon(plan.id)}
-                    </div>
-                    {!isPopular && (
-                      <span className="font-sans text-[10px] font-bold text-[#7c3aed] dark:text-cyan-400 bg-violet-50 dark:bg-violet-950/30 px-3 py-1 rounded-full">
-                        {plan.badge}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <h3 className="font-display font-extrabold text-lg">
-                      {plan.title}
-                    </h3>
-                    <p className={`font-sans text-xs ${isPopular ? "text-slate-200" : "text-slate-500"}`}>
-                      {plan.desc}
-                    </p>
-                  </div>
-
-                  {/* Pricing Rate */}
-                  <div className="py-4 border-y border-dashed border-slate-200/40 dark:border-slate-800/60 flex items-baseline gap-1">
-                    <span className="font-sans text-xs font-bold uppercase">Rp</span>
-                    <span className="font-display font-black text-3xl sm:text-4xl tracking-tight">
-                      {plan.priceIdr}
-                    </span>
-                    <span className={`font-sans text-xs ${isPopular ? "text-slate-200" : "text-slate-500"}`}>
-                      {t.priceUnitKg}
-                    </span>
-                  </div>
-
-                  {/* Weight limit and duration */}
-                  <div className="grid grid-cols-2 gap-4 text-xs">
-                    <div>
-                      <span className={isPopular ? "text-slate-300" : "text-slate-400"}>Minimum</span>
-                      <div className="font-sans font-bold mt-0.5">{plan.minWeight}</div>
-                    </div>
-                    <div>
-                      <span className={isPopular ? "text-slate-300" : "text-slate-400"}>Estimasi</span>
-                      <div className="font-sans font-bold mt-0.5">{plan.speed}</div>
-                    </div>
-                  </div>
-
-                  {/* Features List */}
-                  <ul className="space-y-3 pt-2">
-                    {t.priceFeatures.map((feat, idx) => (
-                      <li key={idx} className="flex gap-2.5 items-center text-xs">
-                        <div
-                          className={`p-0.5 rounded-full shrink-0 ${
-                            isPopular ? "bg-cyan-400 text-slate-900" : "bg-violet-100 dark:bg-violet-950/40 text-[#7c3aed] dark:text-cyan-400"
-                          }`}
-                        >
-                          <Check className="h-3 w-3 stroke-[3]" />
-                        </div>
-                        <span className={isPopular ? "text-slate-100" : "text-slate-600 dark:text-slate-300"}>
-                          {feat}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+        {/* Grid / Stack of Cargo Terms */}
+        <div className="space-y-12">
+          {filteredRules.map((item) => (
+            <div
+              key={item.id}
+              className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-[32px] overflow-hidden shadow-xl shadow-slate-200/50 dark:shadow-none transition-all duration-300"
+            >
+              {/* Card Banner Header */}
+              <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 sm:p-8 relative overflow-hidden">
+                <div className="absolute right-[-20px] top-[-20px] opacity-10 pointer-events-none">
+                  {getIcon(item.id)}
                 </div>
 
-                {/* Choose Plan button */}
-                <div className="mt-8">
+                <div className="flex flex-wrap items-center justify-between gap-4 relative z-10">
+                  <div className="flex items-center gap-3">
+                    <div className="p-3 bg-violet-600/80 rounded-2xl shadow-md backdrop-blur-sm">
+                      {getIcon(item.id)}
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-sans text-[10px] uppercase font-black tracking-widest text-cyan-400 bg-cyan-950/80 border border-cyan-500/30 px-3 py-0.5 rounded-full">
+                          KETENTUAN RESMI
+                        </span>
+                        <span className="font-sans text-[10px] uppercase font-bold text-slate-300 bg-white/10 px-3 py-0.5 rounded-full">
+                          PORT TO DOOR
+                        </span>
+                      </div>
+                      <h3 className="font-display font-extrabold text-2xl sm:text-3xl text-white mt-1">
+                        {item.title}
+                      </h3>
+                      <p className="font-sans text-xs text-slate-300 mt-0.5 max-w-2xl">
+                        {item.subtitle}
+                      </p>
+                    </div>
+                  </div>
+
                   <a
-                    href={getWaLink(plan.title)}
+                    href={getWaLink(item.title)}
                     target="_blank"
                     referrerPolicy="no-referrer"
-                    className={`block w-full text-center font-sans font-bold py-3.5 rounded-full transition-all shadow-md text-sm cursor-pointer ${
-                      isPopular
-                        ? "bg-white hover:bg-slate-100 text-violet-700 hover:shadow-lg shadow-white/10"
-                        : "bg-[#7c3aed] hover:bg-purple-700 text-white hover:shadow-lg shadow-purple-500/15"
-                    }`}
+                    className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-sans font-bold text-xs px-5 py-2.5 rounded-full shadow-lg transition-all cursor-pointer shrink-0"
                   >
-                    {t.priceCta}
+                    <PhoneCall className="h-3.5 w-3.5" />
+                    <span>{lang === "ID" ? "Hubungi Marketing" : "Contact Marketing"}</span>
+                  </a>
+                </div>
+
+                {/* Key Summary Badges */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-6 border-t border-white/10 text-xs">
+                  <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
+                    <span className="text-slate-400 block text-[10px] uppercase font-bold">{lang === "ID" ? "Min. Berat" : "Min. Weight"}</span>
+                    <span className="font-bold text-cyan-300 text-sm mt-0.5 block">{item.minWeight}</span>
+                  </div>
+                  <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
+                    <span className="text-slate-400 block text-[10px] uppercase font-bold">{lang === "ID" ? "Awal Lead Time" : "Lead Time Start"}</span>
+                    <span className="font-bold text-slate-100 text-xs mt-0.5 block">{item.leadTime}</span>
+                  </div>
+                  <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
+                    <span className="text-slate-400 block text-[10px] uppercase font-bold">{lang === "ID" ? "Rumus Dimensi" : "Dimension Formula"}</span>
+                    <span className="font-mono font-bold text-slate-200 text-[11px] mt-0.5 block">{item.dimCalc}</span>
+                  </div>
+                  <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
+                    <span className="text-slate-400 block text-[10px] uppercase font-bold">{lang === "ID" ? "Max. Dimensi" : "Max Dimensions"}</span>
+                    <span className="font-bold text-slate-100 text-[11px] mt-0.5 block">{item.maxDim}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Numbered Rules List Body */}
+              <div className="p-6 sm:p-8 space-y-4">
+                <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+                  <span className="font-display font-extrabold text-sm text-slate-900 dark:text-white uppercase tracking-wider">
+                    {lang === "ID" ? "Catatan Ketentuan (Poin 1 s/d " + item.rules.length + ")" : "Terms Notes (Points 1 to " + item.rules.length + ")"}
+                  </span>
+                  <span className="text-xs text-slate-500 font-medium">
+                    PT Tungkal Trans Indonesia
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {item.rules.map((rule) => (
+                    <div
+                      key={rule.num}
+                      className="flex gap-3.5 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 hover:border-violet-200 dark:hover:border-slate-700 transition-colors"
+                    >
+                      {/* Numbered Circular Badge */}
+                      <div className="w-8 h-8 rounded-xl bg-violet-600 text-white font-display font-extrabold text-sm flex items-center justify-center shrink-0 shadow-sm">
+                        {rule.num}
+                      </div>
+
+                      <div className="space-y-1">
+                        <span className="font-sans font-bold text-xs text-slate-900 dark:text-slate-100 block">
+                          {rule.label}
+                        </span>
+                        <p className="font-sans text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                          {rule.value}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Additional Special Note Callout if applicable */}
+                {item.id === "air_commercial" && (
+                  <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/50 flex items-start gap-3 text-xs text-amber-900 dark:text-amber-200">
+                    <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-bold block">Penting untuk Moda Udara Komersil:</span>
+                      <p className="mt-0.5 leading-relaxed">
+                        Surcharge komoditi khusus seperti Live Animal/Human Remain (+100%) dan Dangerous Goods (+200%) berlaku diluar biaya shipdeck. Mohon lakukan verifikasi jenis muatan ke tim Marketing sebelum penyerahan barang.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Bottom Card Action Footer */}
+                <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100 dark:border-slate-800">
+                  <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                    <ShieldCheck className="h-4 w-4 text-emerald-500" />
+                    <span>{lang === "ID" ? "Layanan Port To Door: Pengantaran dari bandara/pelabuhan asal sampai alamat tujuan dalam kota." : "Port To Door service: Delivery from origin airport/port up to recipient address."}</span>
+                  </div>
+
+                  <a
+                    href={getWaLink(item.title)}
+                    target="_blank"
+                    referrerPolicy="no-referrer"
+                    className="inline-flex items-center gap-2 text-xs font-bold text-[#7c3aed] dark:text-cyan-400 hover:underline cursor-pointer"
+                  >
+                    <span>{lang === "ID" ? "Konsultasi Ongkir & Jadwal via WA" : "Inquire Rates & Schedule on WA"}</span>
+                    <ArrowRight className="h-4 w-4" />
                   </a>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
+        </div>
+
+        {/* Company Core Values Banner (Matching bottom of reference flyers) */}
+        <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-10 shadow-2xl border border-slate-800">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center border-b border-white/10 pb-8">
+            <div className="space-y-2">
+              <div className="w-12 h-12 rounded-2xl bg-violet-600/30 border border-violet-400/30 text-cyan-300 flex items-center justify-center mx-auto">
+                <ShieldCheck className="h-6 w-6" />
+              </div>
+              <h4 className="font-display font-extrabold text-xs uppercase tracking-wider text-slate-100">
+                AMAN & TERPERCAYA
+              </h4>
+            </div>
+
+            <div className="space-y-2">
+              <div className="w-12 h-12 rounded-2xl bg-violet-600/30 border border-violet-400/30 text-cyan-300 flex items-center justify-center mx-auto">
+                <Clock className="h-6 w-6" />
+              </div>
+              <h4 className="font-display font-extrabold text-xs uppercase tracking-wider text-slate-100">
+                CEPAT & TEPAT WAKTU
+              </h4>
+            </div>
+
+            <div className="space-y-2">
+              <div className="w-12 h-12 rounded-2xl bg-violet-600/30 border border-violet-400/30 text-cyan-300 flex items-center justify-center mx-auto">
+                <MapPin className="h-6 w-6" />
+              </div>
+              <h4 className="font-display font-extrabold text-xs uppercase tracking-wider text-slate-100">
+                JARINGAN LUAS
+              </h4>
+            </div>
+
+            <div className="space-y-2">
+              <div className="w-12 h-12 rounded-2xl bg-violet-600/30 border border-violet-400/30 text-cyan-300 flex items-center justify-center mx-auto">
+                <CheckCircle2 className="h-6 w-6" />
+              </div>
+              <h4 className="font-display font-extrabold text-xs uppercase tracking-wider text-slate-100">
+                SOLUSI LOGISTIK TERBAIK
+              </h4>
+            </div>
+          </div>
+
+          <div className="pt-6 text-center space-y-2">
+            <p className="font-display font-black text-amber-400 text-sm uppercase tracking-widest">
+              CEPAT • TEPAT • AMAN • TERPERCAYA
+            </p>
+            <p className="text-xs text-slate-300 font-sans">
+              HUBUNGI MARKETING KAMI UNTUK INFORMASI LEBIH LANJUT: <a href="https://wa.me/6285830831654" target="_blank" className="font-bold text-cyan-300 underline">+62 858-3083-1654</a>
+            </p>
+          </div>
         </div>
 
       </div>
     </section>
   );
 }
+
+

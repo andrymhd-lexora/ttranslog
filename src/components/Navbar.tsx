@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Menu, X, Globe, Sun, Moon, Truck } from "lucide-react";
+import { Menu, X, Globe, Sun, Moon, Truck, LogIn } from "lucide-react";
 import { Language, Theme, TranslationDict } from "../types";
 
 interface NavbarProps {
@@ -27,6 +27,7 @@ export default function Navbar({ lang, setLang, theme, toggleTheme, t }: NavbarP
   const navItems = [
     { name: t.navHome, href: "#home" },
     { name: t.navServices, href: "#services" },
+    { name: lang === "ID" ? "Indonesia Timur & 3T" : "Eastern Indonesia & 3T", href: "#eastern-indonesia" },
     { name: t.navCalculator, href: "#calculator" },
     { name: t.navTracking, href: "#tracking" },
     { name: t.navPricing, href: "#pricing" },
@@ -94,12 +95,15 @@ export default function Navbar({ lang, setLang, theme, toggleTheme, t }: NavbarP
               {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4 text-amber-400" />}
             </button>
 
-            {/* CTA Contact Button */}
+            {/* CTA Login Button */}
             <a
-              href="#contact"
-              className="bg-violet-600 hover:bg-violet-700 text-white font-sans font-semibold px-5 py-2.5 rounded-xl transition-all shadow-md hover:shadow-violet-500/20 text-sm"
+              href="https://ttranslog.base44.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-sans font-bold px-5 py-2.5 rounded-xl transition-all shadow-md hover:shadow-violet-500/20 text-sm"
             >
-              {t.navContact}
+              <LogIn className="h-4 w-4" />
+              <span>Login</span>
             </a>
           </div>
 
@@ -152,11 +156,14 @@ export default function Navbar({ lang, setLang, theme, toggleTheme, t }: NavbarP
           ))}
           <div className="pt-4 border-t border-slate-200 dark:border-slate-800">
             <a
-              href="#contact"
+              href="https://ttranslog.base44.app"
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setIsOpen(false)}
-              className="block w-full text-center bg-violet-600 hover:bg-violet-700 text-white font-sans font-semibold py-3 rounded-xl shadow-md transition-all"
+              className="flex items-center justify-center gap-2 w-full text-center bg-violet-600 hover:bg-violet-700 text-white font-sans font-bold py-3 rounded-xl shadow-md transition-all"
             >
-              {t.navContact}
+              <LogIn className="h-4 w-4" />
+              <span>Login</span>
             </a>
           </div>
         </div>
