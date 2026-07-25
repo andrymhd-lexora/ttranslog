@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Calculator, MapPin, Scale, HelpCircle, ArrowRight, Star, MessageSquare } from "lucide-react";
+import { Calculator, MapPin, Scale, HelpCircle, ArrowRight, Star, MessageSquare, LogIn } from "lucide-react";
 import { Language, TranslationDict } from "../types";
 
 interface HeroProps {
@@ -179,13 +179,13 @@ export default function Hero({ lang, t }: HeroProps) {
                 <ArrowRight className="h-5 w-5" />
               </a>
               <a
-                href="https://wa.me/6285830831654?text=Halo%20T%20Trans%20Logistik,%20saya%20tertarik%20untuk%20berkonsultasi%20mengenai%20layanan%20pengiriman%20kargo."
+                href="https://ttranslog.base44.app"
                 target="_blank"
-                referrerPolicy="no-referrer"
-                className="inline-flex items-center justify-center gap-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-white border border-slate-200 dark:border-slate-700 font-sans font-semibold px-8 py-4 rounded-full shadow-sm hover:scale-[1.02] transition-all duration-250 text-base"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-white border border-slate-200 dark:border-slate-700 font-sans font-bold px-8 py-4 rounded-full shadow-sm hover:scale-[1.02] transition-all duration-250 text-base cursor-pointer"
               >
-                <MessageSquare className="h-5 w-5 text-[#06b6d4]" />
-                <span>{t.heroCtaContact}</span>
+                <LogIn className="h-5 w-5 text-violet-600 dark:text-cyan-400" />
+                <span>Login</span>
               </a>
             </div>
 
