@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { Ship, Plane, Package, Truck, Scale, Clock, MapPin, ShieldCheck, ArrowRight, CheckCircle2, PhoneCall, AlertTriangle, FileText, Anchor } from "lucide-react";
+import { Ship, Plane, Package, Truck, Scale, Clock, MapPin, ShieldCheck, ArrowRight, CheckCircle2, PhoneCall, AlertTriangle, FileText, Anchor, Info, HelpCircle, Box, Sparkles } from "lucide-react";
 import { TranslationDict, Language } from "../types";
 import { getCargoRules } from "../data";
+import TariffTableBrowser from "./TariffTableBrowser";
+import VolumetricFormulaModal from "./VolumetricFormulaModal";
 
 interface PricingSectionProps {
   lang: Language;
@@ -11,6 +13,7 @@ interface PricingSectionProps {
 export default function PricingSection({ lang, t }: PricingSectionProps) {
   const cargoRules = getCargoRules(lang);
   const [selectedTab, setSelectedTab] = useState<string>("all");
+  const [isFormulaModalOpen, setIsFormulaModalOpen] = useState<boolean>(false);
 
   const getIcon = (id: string) => {
     switch (id) {
@@ -59,6 +62,40 @@ export default function PricingSection({ lang, t }: PricingSectionProps) {
               ? "Informasi resmi spesifikasi, batas dimensi, jadwal penerbangan/kapal, dan skema Port To Door PT Tungkal Trans Indonesia."
               : "Official specifications, dimension limits, flight/ship schedules, and Port To Door rules for PT Tungkal Trans Indonesia."}
           </p>
+        </div>
+
+        {/* Volumetric Formula Callout Card Banner */}
+        <div className="bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-700 text-white rounded-3xl p-6 sm:p-7 shadow-xl shadow-purple-500/10 flex flex-col md:flex-row items-center justify-between gap-5 border border-purple-400/30">
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-white/10 backdrop-blur-md rounded-2xl shrink-0 border border-white/20">
+              <Box className="h-7 w-7 text-cyan-300" />
+            </div>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="bg-cyan-400/20 text-cyan-200 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full border border-cyan-300/30">
+                  PANDUAN VOLUMETRIK
+                </span>
+                <span className="text-white/80 text-xs font-mono">
+                  (PxLxT ÷ 4.000 / 5.000 / 6.000)
+                </span>
+              </div>
+              <h3 className="font-display font-extrabold text-base sm:text-lg text-white">
+                Mengapa Berat Volumetrik Berbeda dari Berat Timbangan Fisik?
+              </h3>
+              <p className="text-xs text-purple-100 max-w-2xl leading-relaxed">
+                Pengiriman kargo menggunakan nilai terbesar antara berat timbangan aktual dan berat volume kubikasi barang. Pelajari rumus lengkap dan simulasi contohnya di sini.
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setIsFormulaModalOpen(true)}
+            className="inline-flex items-center gap-2 bg-white text-purple-900 hover:bg-cyan-300 hover:text-slate-900 font-sans font-extrabold text-xs px-5 py-3 rounded-full transition-all shadow-lg shrink-0 cursor-pointer uppercase tracking-wider"
+          >
+            <HelpCircle className="h-4 w-4 text-purple-600" />
+            <span>Pelajari Rumus Volum</span>
+          </button>
         </div>
 
         {/* Tab Filters */}
@@ -145,10 +182,17 @@ export default function PricingSection({ lang, t }: PricingSectionProps) {
                     <span className="text-slate-400 block text-[10px] uppercase font-bold">{lang === "ID" ? "Awal Lead Time" : "Lead Time Start"}</span>
                     <span className="font-bold text-slate-100 text-xs mt-0.5 block">{item.leadTime}</span>
                   </div>
-                  <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
-                    <span className="text-slate-400 block text-[10px] uppercase font-bold">{lang === "ID" ? "Rumus Dimensi" : "Dimension Formula"}</span>
+                  <button
+                    type="button"
+                    onClick={() => setIsFormulaModalOpen(true)}
+                    className="bg-white/5 hover:bg-white/10 border border-white/10 p-3 rounded-xl text-left transition-colors cursor-pointer group"
+                  >
+                    <span className="text-slate-400 font-bold block text-[10px] uppercase flex items-center justify-between">
+                      <span>{lang === "ID" ? "Rumus Dimensi" : "Dimension Formula"}</span>
+                      <Info className="h-3 w-3 text-cyan-400 opacity-60 group-hover:opacity-100" />
+                    </span>
                     <span className="font-mono font-bold text-slate-200 text-[11px] mt-0.5 block">{item.dimCalc}</span>
-                  </div>
+                  </button>
                   <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
                     <span className="text-slate-400 block text-[10px] uppercase font-bold">{lang === "ID" ? "Max. Dimensi" : "Max Dimensions"}</span>
                     <span className="font-bold text-slate-100 text-[11px] mt-0.5 block">{item.maxDim}</span>
@@ -225,6 +269,9 @@ export default function PricingSection({ lang, t }: PricingSectionProps) {
           ))}
         </div>
 
+        {/* Dynamic Rate Matrix Table from Excel Datasets */}
+        <TariffTableBrowser lang={lang} />
+
         {/* Company Core Values Banner (Matching bottom of reference flyers) */}
         <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-10 shadow-2xl border border-slate-800">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center border-b border-white/10 pb-8">
@@ -276,6 +323,13 @@ export default function PricingSection({ lang, t }: PricingSectionProps) {
         </div>
 
       </div>
+
+      {/* Volumetric Formula Explanation Modal */}
+      <VolumetricFormulaModal
+        isOpen={isFormulaModalOpen}
+        onClose={() => setIsFormulaModalOpen(false)}
+        lang={lang}
+      />
     </section>
   );
 }
