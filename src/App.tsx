@@ -8,6 +8,7 @@ import Hero from "./components/Hero";
 import SocialProof from "./components/SocialProof";
 import ServicesSection from "./components/ServicesSection";
 import EasternIndonesiaSection from "./components/EasternIndonesiaSection";
+import PickupHubsSection from "./components/PickupHubsSection";
 import TrackingSection from "./components/TrackingSection";
 import PricingSection from "./components/PricingSection";
 import FaqSection from "./components/FaqSection";
@@ -65,6 +66,9 @@ export default function App() {
 
       {/* Special Eastern Indonesia & 3T Remote Area Section */}
       <EasternIndonesiaSection lang={lang} />
+
+      {/* Cargo Pickup Locations & Consolidation Hubs */}
+      <PickupHubsSection lang={lang} />
 
       {/* Cargo Tracking Simulator */}
       <TrackingSection lang={lang} t={t} />
