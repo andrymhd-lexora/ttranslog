@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Ship, Plane, Package, Truck, Scale, Clock, MapPin, ShieldCheck, ArrowRight, CheckCircle2, PhoneCall, AlertTriangle, FileText, Anchor, Info, HelpCircle, Box, Sparkles } from "lucide-react";
 import { TranslationDict, Language } from "../types";
 import { getCargoRules } from "../data";
-import TariffTableBrowser from "./TariffTableBrowser";
 import VolumetricFormulaModal from "./VolumetricFormulaModal";
 
 interface PricingSectionProps {
@@ -268,9 +267,6 @@ export default function PricingSection({ lang, t }: PricingSectionProps) {
             </div>
           ))}
         </div>
-
-        {/* Dynamic Rate Matrix Table from Excel Datasets */}
-        <TariffTableBrowser lang={lang} />
 
         {/* Company Core Values Banner (Matching bottom of reference flyers) */}
         <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-10 shadow-2xl border border-slate-800">

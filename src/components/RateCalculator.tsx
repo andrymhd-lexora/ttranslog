@@ -223,9 +223,6 @@ export default function RateCalculator({ lang, compactMode = false }: RateCalcul
           <div>
             <h3 className="font-display font-black text-xl text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
               <span>{lang === "ID" ? "Kalkulator Tarif Ongkir" : "Cargo Freight Calculator"}</span>
-              <span className="text-[10px] bg-violet-600 text-white font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wide">
-                ASLI EXCEL
-              </span>
             </h3>
             <p className="font-sans text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               {lang === "ID"
