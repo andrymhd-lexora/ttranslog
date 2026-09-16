@@ -8,6 +8,11 @@
 }
 
 /* Custom Scrollbar */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 85px;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -20,6 +25,21 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(124, 58, 237, 0.4);
+}
+
+/* Custom dropdown scrollbar */
+.dropdown-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.dropdown-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.dropdown-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.3);
+  border-radius: 9999px;
+}
+.dropdown-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 58, 237, 0.6);
 }
 
 /* Custom glow effects */
