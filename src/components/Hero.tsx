@@ -127,7 +127,7 @@ export default function Hero({ lang, t }: HeroProps) {
                 <ArrowRight className="h-4 w-4" />
               </a>
               <a
-                href="https://ttranslog.base44.app"
+                href="https://ttrans-log.base44.app"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-white border border-slate-200 dark:border-slate-700 font-sans font-bold px-7 py-3.5 rounded-2xl shadow-sm hover:scale-[1.01] transition-all text-sm cursor-pointer"
