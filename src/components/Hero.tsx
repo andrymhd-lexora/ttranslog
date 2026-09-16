@@ -39,8 +39,8 @@ export default function Hero({ lang, t }: HeroProps) {
       color: "text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/50 border-amber-200 dark:border-amber-800",
       titleID: "Gratis Shuttle Pickup Jakarta",
       titleEN: "Free Jakarta Pickup",
-      descID: "3 Hub lokasi penjemputan",
-      descEN: "3 Logistics pickup hubs"
+      descID: "4 Hub lokasi penjemputan",
+      descEN: "4 Logistics pickup hubs"
     }
   ];
 

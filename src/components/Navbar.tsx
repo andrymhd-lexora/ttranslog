@@ -125,6 +125,12 @@ export default function Navbar({ lang, setLang, theme, toggleTheme, t }: NavbarP
 
   const pickupHubsList = [
     {
+      id: "jaksel-mampang",
+      name: "Hub Konsolidasi Mampang Prapatan",
+      area: "Mampang Prapatan / Jakarta Selatan",
+      address: "Jl. Mampang Prapatan VIII No 25 C/D"
+    },
+    {
       id: "jakpus",
       name: "Hub 1 - Jakarta Pusat",
       area: "Mangga Dua / Sawah Besar",
@@ -287,7 +293,7 @@ export default function Navbar({ lang, setLang, theme, toggleTheme, t }: NavbarP
                         <div className="flex items-center justify-between px-2">
                           <span className="text-[10px] font-extrabold uppercase text-slate-500 dark:text-slate-400 tracking-wider flex items-center gap-1.5">
                             <Warehouse className="h-3.5 w-3.5 text-violet-500" />
-                            {lang === "ID" ? "3 Lokasi Hub Penjemputan Jakarta" : "3 Jakarta Cargo Pickup Hubs"}
+                            {lang === "ID" ? "Jaringan Hub Penjemputan Jakarta (4 Lokasi)" : "Jakarta Cargo Pickup Hubs (4 Locations)"}
                           </span>
                           <div className="flex items-center gap-2">
                             <a

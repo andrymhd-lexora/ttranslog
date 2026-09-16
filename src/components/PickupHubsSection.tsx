@@ -8,6 +8,33 @@ interface PickupHubsSectionProps {
 
 export const PICKUP_LOCATIONS = [
   {
+    id: "hub-jaksel-mampang",
+    region: "Jakarta Selatan",
+    titleID: "Hub Konsolidasi Mampang Prapatan",
+    titleEN: "Mampang Prapatan Consolidation Hub",
+    badgeID: "Hub Konsolidasi Baru",
+    badgeEN: "New Consolidation Hub",
+    address: "Jl. Mampang Prapatan VIII No 25 C/D, Kel. Tegal Parang, Kec Mampang Prapatan, Jakarta Selatan",
+    lat: -6.248102034241032,
+    lng: 106.82725039402959,
+    gmapsUrl: "https://www.google.com/maps?q=-6.248102034241032,106.82725039402959",
+    featuresID: [
+      "Penerimaan & Drop-Off Kargo Retail & Korporasi",
+      "Akses Strategis Rasuna Said & Gatot Subroto",
+      "Timbangan Digital Heavy Duty & Fast Handling",
+      "Armada Penjemputan Shuttle Fast Response"
+    ],
+    featuresEN: [
+      "Retail & Corporate Cargo Reception Drop-Off",
+      "Strategic Access to Rasuna Said & Gatot Subroto",
+      "Heavy Duty Digital Scale & Fast Handling",
+      "Fast Response Shuttle Pickup Fleet"
+    ],
+    hours: "08.00 - 21.00 WIB",
+    phone: "0816-1654-086",
+    waNumber: "628161654086"
+  },
+  {
     id: "hub-jakpus",
     region: "Jakarta Pusat",
     titleID: "Hub Konsolidasi Pusat Mangga Dua",
@@ -121,13 +148,13 @@ export default function PickupHubsSection({ lang }: PickupHubsSectionProps) {
 
           <p className="font-sans text-slate-300 text-sm sm:text-base leading-relaxed">
             {lang === "ID"
-              ? "PT Tungkal Trans Indonesia menyediakan 3 titik strategis pergudangan, cross-docking, dan hub konsolidasi kargo di DKI Jakarta untuk kemudahan Drop-Off maupun layanan Shuttle Pickup Door-to-Door."
-              : "PT Tungkal Trans Indonesia provides 3 strategic warehousing and consolidation hubs across Jakarta for convenient cargo drop-off and door-to-door shuttle pickup."}
+              ? "PT Tungkal Trans Indonesia menyediakan 4 titik strategis pergudangan, cross-docking, dan hub konsolidasi kargo di DKI Jakarta untuk kemudahan Drop-Off maupun layanan Shuttle Pickup Door-to-Door."
+              : "PT Tungkal Trans Indonesia provides 4 strategic warehousing and consolidation hubs across Jakarta for convenient cargo drop-off and door-to-door shuttle pickup."}
           </p>
         </div>
 
-        {/* 3 Location Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Hub Location Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {PICKUP_LOCATIONS.map((loc) => {
             const title = lang === "ID" ? loc.titleID : loc.titleEN;
             const badge = lang === "ID" ? loc.badgeID : loc.badgeEN;

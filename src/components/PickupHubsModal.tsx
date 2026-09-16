@@ -20,7 +20,7 @@ export default function PickupHubsModal({ isOpen, onClose, lang }: PickupHubsMod
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md animate-fadeIn">
       <div
-        className="bg-slate-900 border border-slate-800 text-white rounded-[32px] max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative p-6 sm:p-8"
+        className="bg-slate-900 border border-slate-800 text-white rounded-[32px] max-w-5xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative p-6 sm:p-8"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -54,8 +54,8 @@ export default function PickupHubsModal({ isOpen, onClose, lang }: PickupHubsMod
             : "Select the nearest hub for direct cargo drop-off, or request Shuttle Pickup directly from your warehouse/office in the Greater Jakarta area."}
         </p>
 
-        {/* Grid of Locations */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        {/* Grid of Locations (4 Hubs in clean 2x2 grid) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
           {PICKUP_LOCATIONS.map((loc) => {
             const title = lang === "ID" ? loc.titleID : loc.titleEN;
             const badge = lang === "ID" ? loc.badgeID : loc.badgeEN;
